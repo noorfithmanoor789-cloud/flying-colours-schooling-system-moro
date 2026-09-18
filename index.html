@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Flying Colours Schooling System Moro</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a3d6b" />
+    <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <img src="assets/logo.jpeg" alt="Logo" class="logo" />
+            <div>
+                <h1 style="margin:0; font-size:1.5rem;">Flying Colours Schooling System</h1>
+                <p style="margin:0; font-size:0.8rem; opacity:0.8;">Moro - Teacher Interview System</p>
+            </div>
+        </header>
+
+        <div id="loginSection" class="card login-card">
+            <h2>Teacher Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+
+        <div id="instructionsSection" class="card instructions-card" style="display:none;">
+            <h2>📋 Interview Instructions</h2>
+            <div id="welcomeMessage" style="font-size:1.3rem; color:#0a3d6b; margin-bottom:15px; font-weight:bold;"></div>
+            <div id="testInfo" style="background:#f0f7ff; padding:12px; border-radius:10px; margin-bottom:15px; font-size:0.95rem; color:#0a3d6b;"></div>
+            <div class="instructions-content">
+                <ul>
+                    <li><strong>Total Questions:</strong> <span id="totalQuestionsDisplay">30</span> Interview Questions</li>
+                    <li><strong>Time Limit:</strong> <span id="timeLimitDisplay">60</span> Minutes</li>
+                    <li><strong>Passing Score:</strong> 50%</li>
+                    <li><strong>Instructions:</strong></li>
+                    <ul>
+                        <li>Read each question carefully</li>
+                        <li>Select the best answer</li>
+                        <li>Answer all questions honestly</li>
+                        <li>Auto-submit when time expires</li>
+                    </ul>
+                </ul>
+                <button id="startExamBtn" class="btn btn-success" style="width:100%; margin-top:15px;">🚀 Start Interview</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+            }
+        }
+    </script>
+    <script type="module" src="assets/app.js"></script>
+</body>
+</html>

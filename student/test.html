@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Teacher Interview - Creative Minds School</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a3d6b" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <style>
+        .answer-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            resize: vertical;
+            transition: all 0.3s;
+            min-height: 120px;
+        }
+        .answer-textarea:focus {
+            border-color: #1a5a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 90, 138, 0.1);
+        }
+        .char-count {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .char-count .count {
+            font-weight: bold;
+            color: #0a3d6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header exam-header">
+            <img src="../assets/logo.jpeg" alt="Logo" class="logo" />
+            <div class="exam-info">
+                <span id="studentNameDisplay">Teacher</span>
+                <span id="testNameDisplay" style="font-size:0.9rem; opacity:0.8;">Interview</span>
+                <span id="timerDisplay">60:00</span>
+            </div>
+        </header>
+
+        <main class="exam-container">
+            <div class="question-progress">
+                <span>Question <span id="currentQNum">1</span>/<span id="totalQNum">30</span></span>
+                <div class="progress-bar">
+                    <div id="progressFill" style="width:3.33%"></div>
+                </div>
+            </div>
+
+            <div class="card question-card">
+                <h3 id="questionText">Loading question...</h3>
+                <div id="answerContainer"></div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="prevBtn" class="btn btn-secondary">⬅ Previous</button>
+                <button id="nextBtn" class="btn btn-primary">Next ➡</button>
+                <button id="submitBtn" class="btn btn-success">📤 Submit Interview</button>
+            </div>
+        </main>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+            }
+        }
+    </script>
+    <script type="module" src="../assets/app.js"></script>
+</body>
+</html>

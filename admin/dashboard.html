@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - Flying Colours Schooling System</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a3d6b" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <style>
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #4a9eff;
+            background: white;
+        }
+        .admin-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e8edf5;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0a3d6b;
+        }
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .stat-card.pass .number { color: #28a745; }
+        .stat-card.fail .number { color: #dc3545; }
+        .status-pass { background: #d4edda; color: #155724; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .status-fail { background: #f8d7da; color: #721c24; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header" style="display:flex; align-items:center; gap:20px;">
+            <img src="../assets/logo.jpeg" alt="Logo" class="logo" />
+            <div>
+                <h1 style="margin:0; font-size:1.5rem;">Flying Colours Schooling System</h1>
+                <p style="margin:0; font-size:0.8rem; opacity:0.8;">Moro - Admin Dashboard</p>
+            </div>
+            <button id="adminLogoutBtn" class="btn btn-secondary" style="margin-left:auto;">🚪 Logout</button>
+        </header>
+
+        <main class="admin-container">
+            <div class="card" style="margin-bottom:20px;">
+                <h3>📋 Interview Management</h3>
+                <div style="display:flex; gap:15px; flex-wrap:wrap; align-items:center; padding:15px 0;">
+                    <div style="flex:1; min-width:200px;">
+                        <label style="font-weight:600; display:block; margin-bottom:5px;">Select Active Interview:</label>
+                        <select id="activeTestSelect" style="width:100%; padding:10px; border:2px solid #dce3ef; border-radius:10px; font-size:1rem;">
+                            <option value="test1">Teacher Interview Questions (30 Qs, 60 min) ✅ (Active)</option>
+                        </select>
+                    </div>
+                    <span id="testStatus" style="padding:8px 15px; border-radius:20px; background:#d4edda; color:#155724; font-weight:600;">
+                        ✅ Active
+                    </span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="number" id="totalTeachers">0</div>
+                    <div class="label">Total Teachers</div>
+                </div>
+                <div class="stat-card total">
+                    <div class="number" id="totalResults">0</div>
+                    <div class="label">Total Interviews</div>
+                </div>
+                <div class="stat-card pass">
+                    <div class="number" id="passCount">0</div>
+                    <div class="label">✅ Selected</div>
+                </div>
+                <div class="stat-card fail">
+                    <div class="number" id="failCount">0</div>
+                    <div class="label">❌ Not Selected</div>
+                </div>
+            </div>
+
+            <div class="admin-controls">
+                <input type="text" id="searchInput" placeholder="🔍 Search teacher..." />
+                <select id="sortSelect">
+                    <option value="latest">Latest Submission</option>
+                    <option value="highest">Highest Score</option>
+                    <option value="lowest">Lowest Score</option>
+                </select>
+                <button id="refreshBtn" class="btn btn-primary">🔄 Refresh</button>
+            </div>
+
+            <div id="resultCount" style="margin:10px 0; padding:10px; border-radius:8px; font-weight:bold; background:#d4edda; color:#155724;">
+                Loading results...
+            </div>
+
+            <div class="card table-card">
+                <div style="overflow-x:auto;">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Teacher Name</th>
+                                <th>Username</th>
+                                <th>Score</th>
+                                <th>Percentage</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                            <tr><td colspan="8" style="text-align:center; padding:30px;">No interviews found</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+            }
+        }
+    </script>
+    <script type="module" src="../assets/app.js"></script>
+</body>
+</html>

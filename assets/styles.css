@@ -1,0 +1,906 @@
+/* ============================================================
+   CREATIVE MINDS SCHOOL SAKRAND - COMPLETE STYLES
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0a3d6b, #1a5a8a);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.app-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #0a3d6b, #1a5a8a);
+    border-radius: 15px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #4a9eff;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #0a3d6b;
+}
+
+.app-header h1 {
+    font-size: 1.8rem;
+    flex: 1;
+}
+
+.app-header p {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    border: 1px solid #e8edf5;
+    animation: fadeIn 0.5s ease;
+}
+
+.login-card {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.instructions-card {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.table-card {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+/* ============================================================
+   FORM ELEMENTS
+   ============================================================ */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #0a3d6b;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #dce3ef;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #1a5a8a;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 90, 138, 0.1);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0a3d6b, #1a5a8a);
+    color: white;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(10, 61, 107, 0.3);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    width: 100%;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ============================================================
+   INSTRUCTIONS
+   ============================================================ */
+.instructions-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.instructions-content li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e8edf5;
+    font-size: 1.05rem;
+}
+
+.instructions-content li:last-child {
+    border-bottom: none;
+}
+
+.instructions-content ul ul {
+    padding-left: 20px;
+}
+
+.instructions-content ul ul li {
+    border-bottom: none;
+    padding: 5px 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+/* ============================================================
+   EXAM / INTERVIEW PAGE
+   ============================================================ */
+.exam-header {
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.exam-info {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    font-size: 1.1rem;
+    flex-wrap: wrap;
+}
+
+#timerDisplay {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4a9eff;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 20px;
+    border-radius: 10px;
+    min-width: 80px;
+    text-align: center;
+}
+
+#timerDisplay.warning {
+    color: #ffc107;
+    animation: pulse 1s infinite;
+}
+
+#timerDisplay.danger {
+    color: #dc3545;
+    animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.question-progress {
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e8edf5;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+#progressFill {
+    height: 100%;
+    background: linear-gradient(135deg, #0a3d6b, #1a5a8a);
+    transition: width 0.5s ease;
+    border-radius: 10px;
+}
+
+.question-card h3 {
+    color: #0a3d6b;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* ============================================================
+   COMMENT BOX / ANSWER TEXTAREA
+   ============================================================ */
+.answer-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #dce3ef;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    resize: vertical;
+    transition: all 0.3s;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.answer-textarea:focus {
+    border-color: #1a5a8a;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 90, 138, 0.1);
+}
+
+.answer-textarea::placeholder {
+    color: #adb5bd;
+}
+
+.char-count {
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.char-count .count {
+    font-weight: bold;
+    color: #0a3d6b;
+}
+
+.char-count .count.good {
+    color: #28a745;
+}
+
+.char-count .count.warning {
+    color: #ffc107;
+}
+
+.char-count .count.danger {
+    color: #dc3545;
+}
+
+/* ============================================================
+   NAVIGATION BUTTONS
+   ============================================================ */
+.navigation-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.navigation-buttons .btn {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* ============================================================
+   RESULT PAGE
+   ============================================================ */
+.result-card {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.result-item {
+    padding: 15px;
+    margin: 10px 0;
+    background: #f8f9fa;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.result-item .label {
+    font-weight: 600;
+    color: #0a3d6b;
+}
+
+.result-item .value {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.pass {
+    color: #28a745;
+}
+
+.fail {
+    color: #dc3545;
+}
+
+/* Answer Display in Results */
+.answers-section {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.answers-section h3 {
+    color: #0a3d6b;
+    margin-bottom: 15px;
+}
+
+.answer-block {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    text-align: left;
+    background: #f8f9fa;
+    border-left: 4px solid #1a5a8a;
+}
+
+.answer-block.answered {
+    background: #d4edda;
+    border-left-color: #28a745;
+}
+
+.answer-block.unanswered {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+}
+
+.answer-block .q-label {
+    font-weight: 600;
+    color: #0a3d6b;
+}
+
+.answer-block .answer-text {
+    margin-top: 5px;
+    color: #333;
+    font-style: italic;
+}
+
+/* ============================================================
+   ADMIN DASHBOARD
+   ============================================================ */
+.admin-header {
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.admin-controls {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.admin-controls input,
+.admin-controls select {
+    padding: 12px 15px;
+    border: 2px solid #dce3ef;
+    border-radius: 10px;
+    font-size: 1rem;
+    flex: 1;
+    min-width: 200px;
+    transition: all 0.3s;
+}
+
+.admin-controls input:focus,
+.admin-controls select:focus {
+    border-color: #1a5a8a;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 90, 138, 0.1);
+}
+
+.admin-controls .btn {
+    flex: 0 1 auto;
+    min-width: 120px;
+}
+
+/* ============================================================
+   STATISTICS CARDS
+   ============================================================ */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid #e8edf5;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card .number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0a3d6b;
+}
+
+.stat-card .label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.stat-card.pass .number { color: #28a745; }
+.stat-card.fail .number { color: #dc3545; }
+.stat-card.total .number { color: #0a3d6b; }
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+#resultsTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+#resultsTable thead th {
+    background: #0a3d6b;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#resultsTable tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e8edf5;
+}
+
+#resultsTable tbody tr:hover {
+    background: #f0f7ff;
+}
+
+#resultsTable tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+#resultsTable tbody tr:nth-child(even):hover {
+    background: #f0f7ff;
+}
+
+/* ============================================================
+   STATUS BADGES
+   ============================================================ */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-block;
+}
+
+.status-pass {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-fail {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* ============================================================
+   ERROR & SUCCESS MESSAGES
+   ============================================================ */
+.error-msg {
+    color: #dc3545;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8d7da;
+    border-radius: 8px;
+    display: none;
+}
+
+.success-msg {
+    color: #28a745;
+    margin-top: 10px;
+    padding: 10px;
+    background: #d4edda;
+    border-radius: 8px;
+    display: none;
+}
+
+/* ============================================================
+   CONNECTION STATUS
+   ============================================================ */
+.connection-status {
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.connection-status.online {
+    background: #d4edda;
+    color: #155724;
+}
+
+.connection-status.offline {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* ============================================================
+   SCHOOL INFO FOOTER
+   ============================================================ */
+.school-footer {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.school-footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.school-footer strong {
+    color: #0a3d6b;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+@media (max-width: 992px) {
+    .app-wrapper {
+        padding: 20px;
+    }
+    
+    .app-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .app-wrapper {
+        padding: 15px;
+    }
+
+    .app-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .app-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .exam-info {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+    }
+
+    .navigation-buttons .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .admin-controls {
+        flex-direction: column;
+    }
+
+    .admin-controls input,
+    .admin-controls select,
+    .admin-controls .btn {
+        width: 100%;
+    }
+
+    #resultsTable {
+        font-size: 0.8rem;
+    }
+
+    #resultsTable thead th,
+    #resultsTable tbody td {
+        padding: 8px 10px;
+    }
+
+    .result-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card .number {
+        font-size: 1.5rem;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .login-card {
+        padding: 20px;
+    }
+
+    .logo {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .answer-textarea {
+        min-height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-wrapper {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .app-header {
+        padding: 12px;
+    }
+
+    .app-header h1 {
+        font-size: 1.1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 10px;
+    }
+
+    .stat-card .number {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    #timerDisplay {
+        font-size: 1.2rem;
+        padding: 5px 15px;
+    }
+
+    .result-item .value {
+        font-size: 1rem;
+    }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.5s ease;
+}
+
+.option-item {
+    animation: slideIn 0.3s ease;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1a5a8a;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0a3d6b;
+}
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+@media print {
+    .app-wrapper {
+        box-shadow: none;
+        padding: 10px;
+    }
+    
+    .app-header {
+        background: #0a3d6b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .btn {
+        display: none !important;
+    }
+    
+    .navigation-buttons {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    #timerDisplay {
+        display: none !important;
+    }
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+
+.hidden { display: none !important; }
+.visible { display: block !important; }
+
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-10 { gap: 10px; }
+.gap-20 { gap: 20px; }
+
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
+
+.text-success { color: #28a745; }
+.text-danger { color: #dc3545; }
+.text-warning { color: #ffc107; }
+.text-primary { color: #0a3d6b; }
+.text-muted { color: #6c757d; }
+
+.bg-success { background: #d4edda; }
+.bg-danger { background: #f8d7da; }
+.bg-warning { background: #fff3cd; }
+.bg-primary { background: #cce5ff; }

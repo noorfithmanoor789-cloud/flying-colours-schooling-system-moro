@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Interview Results - Creative Minds School</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a3d6b" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <img src="../assets/logo.jpeg" alt="Logo" class="logo" />
+            <div>
+                <h1 style="margin:0; font-size:1.5rem;">Creative Minds School</h1>
+                <p style="margin:0; font-size:0.8rem; opacity:0.8;">Interview Results</p>
+            </div>
+        </header>
+
+        <main class="result-container">
+            <div class="card result-card">
+                <div id="resultContent"></div>
+                <button id="logoutBtn" class="btn btn-secondary" style="margin-top:20px;">🚪 Logout</button>
+            </div>
+        </main>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+            }
+        }
+    </script>
+    <script type="module" src="../assets/app.js"></script>
+</body>
+</html>
