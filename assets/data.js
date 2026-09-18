@@ -1,5 +1,5 @@
 // ============================================================
-// COLLEGE INFORMATION
+// SCHOOL INFORMATION - Flying Colours Schooling System Moro
 // ============================================================
 export const COLLEGE_INFO = {
     name: 'Flying Colours Schooling System Moro',
@@ -10,7 +10,7 @@ export const COLLEGE_INFO = {
 };
 
 // ============================================================
-// STUDENTS LIST (Replace with Demo Users)
+// TEACHERS LIST (Demo Users) - ONLY ONE TIME
 // ============================================================
 export const EXAM_STUDENTS = [
     { name: 'DEMO USER 1', username: 'demo1', password: 'demo1' },
@@ -83,6 +83,23 @@ export const INTERVIEW_CONFIG = {
     passingScore: 50
 };
 
+// ============================================================
+// EXPORTS
+// ============================================================
 export const EXAM_QUESTIONS = INTERVIEW_QUESTIONS;
 export const CURRENT_TEST = INTERVIEW_CONFIG;
-export const EXAM_STUDENTS = TEACHERS;
+export const ACTIVE_TEST_ID = 'test1';
+export const ALL_TESTS = {
+    test1: {
+        id: 'test1',
+        name: 'Teacher Interview',
+        description: '30 Interview Questions',
+        totalQuestions: 30,
+        timeLimit: 60,
+        passingScore: 50,
+        questions: INTERVIEW_QUESTIONS
+    }
+};
+
+console.log('🏫 Flying Colours Schooling System Moro');
+console.log('📝 Total Teachers:', EXAM_STUDENTS.length);
