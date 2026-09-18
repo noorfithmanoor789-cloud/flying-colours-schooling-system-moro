@@ -1,13 +1,20 @@
 import { db } from './firebase.js';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
-import { TEACHERS, INTERVIEW_QUESTIONS, INTERVIEW_CONFIG, SCHOOL_INFO } from './data.js';
+import { 
+    EXAM_STUDENTS, 
+    EXAM_QUESTIONS, 
+    CURRENT_TEST, 
+    ACTIVE_TEST_ID, 
+    ALL_TESTS,
+    COLLEGE_INFO 
+} from './data.js';
 
 // ==================== STATE MANAGEMENT ====================
 let currentUser = null;
 let currentQuestionIndex = 0;
-let userAnswers = new Array(INTERVIEW_QUESTIONS.length).fill('');
+let userAnswers = new Array(EXAM_QUESTIONS.length).fill('');
 let timer = null;
-let timeLeft = INTERVIEW_CONFIG.timeLimit * 60;
+let timeLeft = CURRENT_TEST.timeLimit * 60;
 let examStartTime = null;
 let examEndTime = null;
 let examSubmitted = false;
@@ -24,45 +31,76 @@ function updateInstructions() {
     const testInfo = document.getElementById('testInfo');
     if (testInfo) {
         testInfo.innerHTML = `
-            <strong>🏫 ${SCHOOL_INFO.name}</strong><br>
-            <strong>📝 Interview:</strong> ${INTERVIEW_CONFIG.name} 
-            | <strong>Questions:</strong> ${INTERVIEW_CONFIG.totalQuestions} 
-            | <strong>Time:</strong> ${INTERVIEW_CONFIG.timeLimit} minutes
+            <strong>🏫 ${COLLEGE_INFO.name}</strong><br>
+            <strong>📝 Interview:</strong> ${CURRENT_TEST.name} 
+            | <strong>Questions:</strong> ${CURRENT_TEST.totalQuestions} 
+            | <strong>Time:</strong> ${CURRENT_TEST.timeLimit} minutes
         `;
     }
     
-    document.getElementById('totalQuestionsDisplay').textContent = INTERVIEW_CONFIG.totalQuestions;
-    document.getElementById('timeLimitDisplay').textContent = INTERVIEW_CONFIG.timeLimit;
+    const totalQuestionsDisplay = document.getElementById('totalQuestionsDisplay');
+    if (totalQuestionsDisplay) {
+        totalQuestionsDisplay.textContent = CURRENT_TEST.totalQuestions;
+    }
+    
+    const timeLimitDisplay = document.getElementById('timeLimitDisplay');
+    if (timeLimitDisplay) {
+        timeLimitDisplay.textContent = CURRENT_TEST.timeLimit;
+    }
 }
 
-// ==================== LOGIN ====================
+// ==================== LOGIN FUNCTION ====================
 if (loginForm) {
+    console.log('✅ Login form found');
+    console.log('📋 Total Students:', EXAM_STUDENTS.length);
+    console.log('📋 First Student:', EXAM_STUDENTS[0]);
+    
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('🔐 Login attempt started');
+        
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value.trim();
+        
+        console.log('👤 Username entered:', username);
+        console.log('🔑 Password entered:', password);
 
+        // Admin Login
         if (username === 'admin' && password === 'admin123') {
+            console.log('✅ Admin login successful');
             window.location.href = 'admin/dashboard.html';
             return;
         }
 
-        const teacher = TEACHERS.find(s => s.username === username && s.password === password);
+        // Teacher Login
+        const teacher = EXAM_STUDENTS.find(s => s.username === username && s.password === password);
+        console.log('🔍 Teacher found:', teacher);
 
         if (teacher) {
             currentUser = teacher;
             localStorage.setItem('examUser', JSON.stringify(teacher));
-            loginSection.style.display = 'none';
-            instructionsSection.style.display = 'block';
-            loginError.style.display = 'none';
             
-            document.getElementById('welcomeMessage').textContent = `Welcome, ${teacher.name}!`;
+            if (loginSection) loginSection.style.display = 'none';
+            if (instructionsSection) instructionsSection.style.display = 'block';
+            if (loginError) loginError.style.display = 'none';
+            
+            const welcomeMsg = document.getElementById('welcomeMessage');
+            if (welcomeMsg) {
+                welcomeMsg.textContent = `Welcome, ${teacher.name}!`;
+            }
+            
             updateInstructions();
+            console.log('✅ Teacher login successful');
         } else {
-            loginError.textContent = 'Invalid username or password. Please try again.';
-            loginError.style.display = 'block';
+            if (loginError) {
+                loginError.textContent = 'Invalid username or password. Please try again.';
+                loginError.style.display = 'block';
+            }
+            console.log('❌ Invalid credentials');
         }
     });
+} else {
+    console.log('❌ Login form NOT found');
 }
 
 // ==================== START INTERVIEW ====================
@@ -82,8 +120,8 @@ if (window.location.pathname.includes('test.html')) {
 
     currentUser = userData;
     document.getElementById('studentNameDisplay').textContent = currentUser.name;
-    document.getElementById('totalQNum').textContent = INTERVIEW_QUESTIONS.length;
-    document.getElementById('testNameDisplay').textContent = INTERVIEW_CONFIG.name;
+    document.getElementById('totalQNum').textContent = EXAM_QUESTIONS.length;
+    document.getElementById('testNameDisplay').textContent = CURRENT_TEST.name;
 
     displayQuestion(0);
     startTimer();
@@ -94,28 +132,25 @@ if (window.location.pathname.includes('test.html')) {
 }
 
 function displayQuestion(index) {
-    if (index < 0 || index >= INTERVIEW_QUESTIONS.length) return;
+    if (index < 0 || index >= EXAM_QUESTIONS.length) return;
 
-    const question = INTERVIEW_QUESTIONS[index];
+    const question = EXAM_QUESTIONS[index];
     document.getElementById('currentQNum').textContent = index + 1;
     document.getElementById('questionText').textContent = question.question;
-    document.getElementById('progressFill').style.width = `${((index + 1) / INTERVIEW_QUESTIONS.length) * 100}%`;
+    document.getElementById('progressFill').style.width = `${((index + 1) / EXAM_QUESTIONS.length) * 100}%`;
 
     const answerContainer = document.getElementById('answerContainer');
     answerContainer.innerHTML = `
         <div style="margin-top:15px;">
             <label style="font-weight:600; color:#0a3d6b; display:block; margin-bottom:8px;">Your Answer:</label>
             <textarea id="answerText" rows="6" placeholder="Write your answer here..." 
-                style="width:100%; padding:12px; border:2px solid #dce3ef; border-radius:10px; font-size:1rem; font-family:inherit; resize:vertical; transition:all 0.3s;"
-                onfocus="this.style.borderColor='#1a5a8a'; this.style.boxShadow='0 0 0 3px rgba(26,90,138,0.1)';"
-                onblur="this.style.borderColor='#dce3ef'; this.style.boxShadow='none';">${userAnswers[index] || ''}</textarea>
+                style="width:100%; padding:12px; border:2px solid #dce3ef; border-radius:10px; font-size:1rem; font-family:inherit; resize:vertical;">${userAnswers[index] || ''}</textarea>
             <div style="margin-top:5px; font-size:0.85rem; color:#6c757d;">
                 💡 <span id="charCount">${userAnswers[index] ? userAnswers[index].length : 0}</span> characters
             </div>
         </div>
     `;
 
-    // Auto-save on input
     const textarea = document.getElementById('answerText');
     if (textarea) {
         textarea.addEventListener('input', function() {
@@ -130,14 +165,14 @@ function displayQuestion(index) {
 
 function navigateQuestion(direction) {
     const newIndex = currentQuestionIndex + direction;
-    if (newIndex >= 0 && newIndex < INTERVIEW_QUESTIONS.length) {
+    if (newIndex >= 0 && newIndex < EXAM_QUESTIONS.length) {
         displayQuestion(newIndex);
     }
 }
 
 function updateButtons() {
     document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
-    document.getElementById('nextBtn').disabled = currentQuestionIndex === INTERVIEW_QUESTIONS.length - 1;
+    document.getElementById('nextBtn').disabled = currentQuestionIndex === EXAM_QUESTIONS.length - 1;
 }
 
 function startTimer() {
@@ -162,7 +197,6 @@ function startTimer() {
 async function submitExam() {
     if (examSubmitted) return;
     
-    // Check if all questions are answered
     const unanswered = userAnswers.filter(a => a.trim() === '').length;
     if (unanswered > 0) {
         if (!confirm(`You have ${unanswered} unanswered questions. Are you sure you want to submit?`)) {
@@ -175,7 +209,6 @@ async function submitExam() {
     examEndTime = new Date();
     const timeTaken = Math.floor((examEndTime - examStartTime) / 1000);
 
-    // Calculate score based on answer length (at least 10 characters)
     let answered = 0;
     userAnswers.forEach(answer => {
         if (answer.trim().length >= 10) {
@@ -183,14 +216,14 @@ async function submitExam() {
         }
     });
 
-    const total = INTERVIEW_QUESTIONS.length;
+    const total = EXAM_QUESTIONS.length;
     const percentage = ((answered / total) * 100).toFixed(2);
     const passFail = parseFloat(percentage) >= 50 ? 'Pass' : 'Fail';
 
     const resultData = {
         teacherName: currentUser.name,
         username: currentUser.username,
-        interviewName: INTERVIEW_CONFIG.name,
+        interviewName: CURRENT_TEST.name,
         answers: userAnswers,
         answeredQuestions: answered,
         totalQuestions: total,
@@ -199,8 +232,7 @@ async function submitExam() {
         examDate: new Date().toLocaleDateString(),
         timeTaken: timeTaken,
         submittedAt: new Date().toISOString(),
-        school: SCHOOL_INFO.name,
-        principal: SCHOOL_INFO.principal
+        school: COLLEGE_INFO.name
     };
 
     localStorage.setItem('examResult', JSON.stringify(resultData));
@@ -255,7 +287,6 @@ if (window.location.pathname.includes('result.html')) {
 
     const resultContainer = document.getElementById('resultContent');
     
-    // Generate answers HTML
     let answersHTML = '';
     if (resultData.answers) {
         resultData.answers.forEach((answer, index) => {
@@ -271,7 +302,7 @@ if (window.location.pathname.includes('result.html')) {
     resultContainer.innerHTML = `
         <h2>📊 Interview Results</h2>
         <div style="background:#e8f4fd; padding:12px; border-radius:10px; margin-bottom:15px;">
-            <p style="margin:0; font-weight:bold; color:#0a3d6b;">🏫 ${resultData.school || 'Creative Minds School Sakrand'}</p>
+            <p style="margin:0; font-weight:bold; color:#0a3d6b;">🏫 ${resultData.school || 'Flying Colours Schooling System'}</p>
         </div>
         <div class="result-item">
             <span class="label">Teacher Name:</span>
@@ -309,12 +340,6 @@ if (window.location.pathname.includes('result.html')) {
                 ${answersHTML}
             </div>
         </div>
-        <div class="result-item" style="background: #d4edda; margin-top:15px;">
-            <span class="label">Status:</span>
-            <span class="value" style="font-size:1rem; color: #155724;">
-                ✅ Saved to Database
-            </span>
-        </div>
     `;
 
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
@@ -351,21 +376,19 @@ let allResults = [];
 
 async function loadResults() {
     const tbody = document.getElementById('resultsBody');
-    tbody.innerHTML = '<tr><td colspan="7">Loading interviews...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8">Loading interviews...</td></tr>';
 
     try {
         allResults = await getAllResults();
         displayResults(allResults);
         
         document.getElementById('resultCount').innerHTML = `📊 Total Interviews: <strong>${allResults.length}</strong>`;
-
-        // Update stats
-        document.getElementById('totalTeachers').textContent = TEACHERS.length;
+        document.getElementById('totalTeachers').textContent = EXAM_STUDENTS.length;
         document.getElementById('totalResults').textContent = allResults.length;
         document.getElementById('passCount').textContent = allResults.filter(r => r.passFail === 'Pass').length;
         document.getElementById('failCount').textContent = allResults.filter(r => r.passFail === 'Fail').length;
     } catch (error) {
-        tbody.innerHTML = '<tr><td colspan="7">Error loading results</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8">Error loading results</td></tr>';
         console.error(error);
     }
 }
@@ -373,7 +396,7 @@ async function loadResults() {
 function displayResults(results) {
     const tbody = document.getElementById('resultsBody');
     if (results.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7">No interviews found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px;">No interviews found</td></tr>';
         return;
     }
 
@@ -390,6 +413,7 @@ function displayResults(results) {
                 </span>
             </td>
             <td>${result.examDate || 'N/A'}</td>
+            <td>${result.timeTaken ? `${Math.floor(result.timeTaken / 60)}m ${result.timeTaken % 60}s` : 'N/A'}</td>
         </tr>
     `).join('');
 }
