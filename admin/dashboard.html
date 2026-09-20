@@ -3,135 +3,287 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Admin Dashboard - Flying Colours Schooling System</title>
+    <title>Admin Dashboard - Flying Colours Schooling System Moro</title>
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0a3d6b" />
     <link rel="stylesheet" href="../assets/styles.css" />
     <style>
-        .logo-img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid #4a9eff;
-            background: white;
-        }
-        .admin-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        /* ===== Dashboard Specific Styles ===== */
+        .admin-container { padding: 0 5px; }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
+
         .stat-card {
             background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
             border: 1px solid #e8edf5;
             text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .stat-card .number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #0a3d6b;
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
-        .stat-card .label {
-            font-size: 0.85rem;
-            color: #6c757d;
-            margin-top: 5px;
-        }
+
+        .stat-card .number { font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+        .stat-card .label { font-size: 0.85rem; color: #6c757d; margin-top: 5px; font-weight: 500; }
+        .stat-card .icon { font-size: 2rem; margin-bottom: 5px; }
+
+        .stat-card.total .number { color: #0a3d6b; }
         .stat-card.pass .number { color: #28a745; }
         .stat-card.fail .number { color: #dc3545; }
-        .status-pass { background: #d4edda; color: #155724; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .status-fail { background: #f8d7da; color: #721c24; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .stat-card.rate .number { color: #1a5a8a; }
+
+        .stat-card.total { border-left: 4px solid #0a3d6b; }
+        .stat-card.pass { border-left: 4px solid #28a745; }
+        .stat-card.fail { border-left: 4px solid #dc3545; }
+        .stat-card.rate { border-left: 4px solid #1a5a8a; }
+
+        .admin-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #e8edf5;
+        }
+
+        .admin-controls input,
+        .admin-controls select {
+            padding: 10px 14px;
+            border: 2px solid #dce3ef;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            flex: 1;
+            min-width: 180px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .admin-controls input:focus,
+        .admin-controls select:focus {
+            border-color: #1a5a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 90, 138, 0.1);
+        }
+
+        .admin-controls .btn { flex: 0 1 auto; min-width: 100px; padding: 10px 20px; }
+
+        .result-count {
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .result-count .count-number { font-size: 1.3rem; }
+        .result-count .filter-info { font-size: 0.85rem; font-weight: 400; opacity: 0.8; }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e8edf5;
+            background: white;
+        }
+
+        #resultsTable { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+        #resultsTable thead { background: #0a3d6b; color: white; }
+        #resultsTable thead th { padding: 14px 16px; text-align: left; font-weight: 600; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
+        #resultsTable tbody td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+        #resultsTable tbody tr { transition: all 0.2s; }
+        #resultsTable tbody tr:hover { background: #f0f7ff; }
+        #resultsTable tbody tr:nth-child(even) { background: #fafbfc; }
+        #resultsTable tbody tr:nth-child(even):hover { background: #f0f7ff; }
+
+        .status-badge { padding: 5px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; display: inline-block; text-align: center; min-width: 70px; }
+        .status-pass { background: #d4edda; color: #155724; }
+        .status-fail { background: #f8d7da; color: #721c24; }
+
+        .score-display { font-weight: 600; }
+        .score-display.high { color: #28a745; }
+        .score-display.medium { color: #ffc107; }
+        .score-display.low { color: #dc3545; }
+
+        .percent-bar { width: 100%; height: 6px; background: #e8edf5; border-radius: 10px; overflow: hidden; margin-top: 4px; }
+        .percent-bar .fill { height: 100%; border-radius: 10px; transition: width 0.8s ease; }
+        .percent-bar .fill.high { background: #28a745; }
+        .percent-bar .fill.medium { background: #ffc107; }
+        .percent-bar .fill.low { background: #dc3545; }
+
+        .btn-view-answers { background: #0a3d6b; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .btn-view-answers:hover { background: #1a5a8a; transform: scale(1.05); }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; animation: modalIn 0.3s ease; }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-close { position: sticky; top: 0; float: right; background: #dc3545; color: white; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: all 0.2s; }
+        .modal-close:hover { transform: scale(1.1); }
+        .modal-title { color: #0a3d6b; margin-bottom: 15px; font-size: 1.3rem; padding-right: 40px; }
+        .modal-answer { padding: 10px 14px; margin: 6px 0; border-radius: 8px; border-left: 4px solid #1a5a8a; background: #f8f9fa; }
+        .modal-answer .q-label { font-weight: 600; color: #0a3d6b; display: block; }
+        .modal-answer .a-text { margin-top: 4px; color: #333; font-style: italic; line-height: 1.6; }
+        .modal-answer.answered { border-left-color: #28a745; background: #d4edda; }
+        .modal-answer.unanswered { border-left-color: #dc3545; background: #f8d7da; }
+
+        .no-data { text-align: center; padding: 40px 20px; color: #6c757d; }
+        .no-data .icon { font-size: 4rem; margin-bottom: 10px; opacity: 0.5; }
+        .no-data h3 { color: #0a3d6b; margin-bottom: 5px; }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card { padding: 15px; }
+            .stat-card .number { font-size: 1.5rem; }
+            .admin-controls { padding: 12px; }
+            .admin-controls input, .admin-controls select { min-width: 100%; flex: 1 1 100%; }
+            .admin-controls .btn { flex: 1 1 100%; }
+            #resultsTable { font-size: 0.8rem; }
+            #resultsTable thead th, #resultsTable tbody td { padding: 8px 10px; }
+            .modal-content { padding: 20px; max-width: 100%; }
+            .result-count { flex-direction: column; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .stat-card { padding: 12px; }
+            .stat-card .number { font-size: 1.2rem; }
+            .stat-card .label { font-size: 0.7rem; }
+            .stat-card .icon { font-size: 1.2rem; }
+        }
+
+        @media print {
+            .admin-controls, .btn-view-answers, .modal-close { display: none !important; }
+            .modal-overlay { position: static; background: none; padding: 0; }
+            .modal-content { max-height: none; overflow: visible; box-shadow: none; border: 1px solid #ddd; }
+        }
     </style>
 </head>
 <body>
     <div class="app-wrapper">
-        <header class="app-header" style="display:flex; align-items:center; gap:20px;">
+        <!-- Header -->
+        <header class="app-header admin-header">
             <img src="../assets/logo.jpeg" alt="Logo" class="logo" />
             <div>
-                <h1 style="margin:0; font-size:1.5rem;">Flying Colours Schooling System</h1>
-                <p style="margin:0; font-size:0.8rem; opacity:0.8;">Moro - Admin Dashboard</p>
+                <h1 style="margin:0; font-size:1.5rem;">Flying Colours Schooling System Moro</h1>
+                <p style="margin:0; font-size:0.8rem; opacity:0.8;">Admin Dashboard</p>
             </div>
             <button id="adminLogoutBtn" class="btn btn-secondary" style="margin-left:auto;">🚪 Logout</button>
         </header>
 
         <main class="admin-container">
-            <div class="card" style="margin-bottom:20px;">
-                <h3>📋 Interview Management</h3>
-                <div style="display:flex; gap:15px; flex-wrap:wrap; align-items:center; padding:15px 0;">
-                    <div style="flex:1; min-width:200px;">
-                        <label style="font-weight:600; display:block; margin-bottom:5px;">Select Active Interview:</label>
-                        <select id="activeTestSelect" style="width:100%; padding:10px; border:2px solid #dce3ef; border-radius:10px; font-size:1rem;">
-                            <option value="test1">Teacher Interview Questions (30 Qs, 60 min) ✅ (Active)</option>
-                        </select>
-                    </div>
-                    <span id="testStatus" style="padding:8px 15px; border-radius:20px; background:#d4edda; color:#155724; font-weight:600;">
-                        ✅ Active
-                    </span>
-                </div>
-            </div>
-
-            <div class="stats-grid">
+            <!-- ===== STATISTICS CARDS ===== -->
+            <div class="stats-grid" id="statsGrid">
                 <div class="stat-card total">
+                    <div class="icon">👨‍🏫</div>
                     <div class="number" id="totalTeachers">0</div>
                     <div class="label">Total Teachers</div>
                 </div>
                 <div class="stat-card total">
+                    <div class="icon">📝</div>
                     <div class="number" id="totalResults">0</div>
                     <div class="label">Total Interviews</div>
                 </div>
                 <div class="stat-card pass">
+                    <div class="icon">✅</div>
                     <div class="number" id="passCount">0</div>
-                    <div class="label">✅ Selected</div>
+                    <div class="label">Selected</div>
                 </div>
                 <div class="stat-card fail">
+                    <div class="icon">❌</div>
                     <div class="number" id="failCount">0</div>
-                    <div class="label">❌ Not Selected</div>
+                    <div class="label">Not Selected</div>
+                </div>
+                <div class="stat-card rate">
+                    <div class="icon">📊</div>
+                    <div class="number" id="passRate">0%</div>
+                    <div class="label">Selection Rate</div>
                 </div>
             </div>
 
+            <!-- ===== SEARCH & FILTER ===== -->
             <div class="admin-controls">
-                <input type="text" id="searchInput" placeholder="🔍 Search teacher..." />
+                <input type="text" id="searchInput" placeholder="🔍 Search by name or username..." />
                 <select id="sortSelect">
-                    <option value="latest">Latest Submission</option>
-                    <option value="highest">Highest Score</option>
-                    <option value="lowest">Lowest Score</option>
+                    <option value="latest">📅 Latest Submission</option>
+                    <option value="highest">📈 Highest Score</option>
+                    <option value="lowest">📉 Lowest Score</option>
+                    <option value="name">🔤 Name (A-Z)</option>
                 </select>
                 <button id="refreshBtn" class="btn btn-primary">🔄 Refresh</button>
             </div>
 
-            <div id="resultCount" style="margin:10px 0; padding:10px; border-radius:8px; font-weight:bold; background:#d4edda; color:#155724;">
-                Loading results...
+            <!-- ===== RESULT COUNT ===== -->
+            <div class="result-count" id="resultCount" style="background:#d4edda; color:#155724;">
+                <span>📊 <span class="count-number" id="countDisplay">0</span> Interviews Found</span>
+                <span class="filter-info" id="filterInfo"></span>
             </div>
 
-            <div class="card table-card">
-                <div style="overflow-x:auto;">
-                    <table id="resultsTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Teacher Name</th>
-                                <th>Username</th>
-                                <th>Score</th>
-                                <th>Percentage</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resultsBody">
-                            <tr><td colspan="8" style="text-align:center; padding:30px;">No interviews found</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <!-- ===== RESULTS TABLE ===== -->
+            <div class="table-wrapper">
+                <table id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Teacher Name</th>
+                            <th>Username</th>
+                            <th>Score</th>
+                            <th>Percentage</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <tr>
+                            <td colspan="8">
+                                <div class="no-data">
+                                    <div class="icon">📭</div>
+                                    <h3>No Interviews Found</h3>
+                                    <p>Teachers haven't taken the interview yet.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ===== FOOTER ===== -->
+            <div class="school-footer">
+                <p>
+                    📌 <strong>Flying Colours Schooling System Moro</strong> — Teacher Interview System
+                    <br>👨‍🏫 Prepared by: <strong>MISBAH KAZI</strong>
+                </p>
             </div>
         </main>
+    </div>
+
+    <!-- ===== ANSWER VIEW MODAL ===== -->
+    <div class="modal-overlay" id="answerModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalBtn">✕</button>
+            <h2 class="modal-title" id="modalTitle">📝 Teacher's Answers</h2>
+            <div id="modalAnswers"></div>
+        </div>
     </div>
 
     <script type="importmap">
@@ -142,6 +294,317 @@
             }
         }
     </script>
-    <script type="module" src="../assets/app.js"></script>
+    <script type="module">
+        import { db } from '../assets/firebase.js';
+        import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+        import { TEACHERS } from '../assets/data.js';
+
+        // ============================================================
+        // CHECK ADMIN LOGIN
+        // ============================================================
+        const adminLoggedIn = localStorage.getItem('adminLoggedIn');
+        if (!adminLoggedIn) {
+            const password = prompt('Enter admin password:');
+            if (password === 'admin123') {
+                localStorage.setItem('adminLoggedIn', 'true');
+            } else {
+                alert('Invalid admin password!');
+                window.location.href = '../index.html';
+            }
+        }
+
+        // ============================================================
+        // DOM REFERENCES
+        // ============================================================
+        const resultsBody = document.getElementById('resultsBody');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+        const countDisplay = document.getElementById('countDisplay');
+        const filterInfo = document.getElementById('filterInfo');
+        const resultCount = document.getElementById('resultCount');
+        const modalOverlay = document.getElementById('answerModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalAnswers = document.getElementById('modalAnswers');
+
+        let allResults = [];
+        let filteredResults = [];
+
+        // ============================================================
+        // LOAD RESULTS
+        // ============================================================
+        async function loadResults() {
+            resultsBody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align:center; padding:30px;">
+                        <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
+                            <span style="font-size:1.5rem;">⏳</span>
+                            <span>Loading interviews...</span>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const q = query(collection(db, 'interview-results'), orderBy('submittedAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                
+                allResults = [];
+                querySnapshot.forEach((doc) => {
+                    allResults.push({ id: doc.id, ...doc.data() });
+                });
+
+                console.log('📊 Results loaded:', allResults.length);
+                applyFilters();
+                updateStats();
+
+            } catch (error) {
+                console.error('Error loading results:', error);
+                resultsBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align:center; padding:30px;">
+                            <div style="color:#dc3545;">
+                                <div style="font-size:2rem;">❌</div>
+                                <p>Error loading results. Please refresh.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // ============================================================
+        // APPLY FILTERS
+        // ============================================================
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const sortType = sortSelect.value;
+
+            let filtered = [...allResults];
+
+            if (searchTerm) {
+                filtered = filtered.filter(r => 
+                    (r.teacherName?.toLowerCase().includes(searchTerm) || 
+                     r.username?.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            switch(sortType) {
+                case 'highest':
+                    filtered.sort((a, b) => (b.percentage || 0) - (a.percentage || 0));
+                    break;
+                case 'lowest':
+                    filtered.sort((a, b) => (a.percentage || 0) - (b.percentage || 0));
+                    break;
+                case 'name':
+                    filtered.sort((a, b) => (a.teacherName || '').localeCompare(b.teacherName || ''));
+                    break;
+                case 'latest':
+                default:
+                    filtered.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+                    break;
+            }
+
+            filteredResults = filtered;
+            displayResults(filteredResults);
+            updateCount(filteredResults);
+        }
+
+        // ============================================================
+        // DISPLAY RESULTS
+        // ============================================================
+        function displayResults(results) {
+            if (results.length === 0) {
+                resultsBody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="no-data">
+                                <div class="icon">📭</div>
+                                <h3>No Interviews Found</h3>
+                                <p>Try changing your search or filter criteria.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            resultsBody.innerHTML = results.map((result, index) => {
+                const passClass = result.passFail === 'Pass' ? 'status-pass' : 'status-fail';
+                const statusText = result.passFail === 'Pass' ? '✅ Selected' : '❌ Not Selected';
+                
+                const percent = result.percentage || 0;
+                let percentClass = 'low';
+                if (percent >= 70) percentClass = 'high';
+                else if (percent >= 50) percentClass = 'medium';
+                
+                let scoreClass = 'low';
+                if (percent >= 70) scoreClass = 'high';
+                else if (percent >= 50) scoreClass = 'medium';
+
+                const hasAnswers = result.answers && Array.isArray(result.answers) && result.answers.length > 0;
+
+                return `
+                    <tr>
+                        <td><strong>${index + 1}</strong></td>
+                        <td><strong>${result.teacherName || 'N/A'}</strong></td>
+                        <td>${result.username || 'N/A'}</td>
+                        <td>
+                            <span class="score-display ${scoreClass}">
+                                ${result.answeredQuestions || 0}/${result.totalQuestions || 30}
+                            </span>
+                        </td>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span style="font-weight:600; min-width:45px;">${percent}%</span>
+                                <div class="percent-bar" style="flex:1; max-width:80px;">
+                                    <div class="fill ${percentClass}" style="width:${Math.min(percent, 100)}%;"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge ${passClass}">${statusText}</span></td>
+                        <td style="font-size:0.85rem;">${result.examDate || 'N/A'}</td>
+                        <td>
+                            ${hasAnswers ? `
+                                <button class="btn-view-answers" data-index="${index}" data-name="${result.teacherName}">
+                                    📋 View Answers
+                                </button>
+                            ` : `
+                                <span style="color:#6c757d; font-size:0.75rem;">No answers</span>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.btn-view-answers').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const name = this.dataset.name;
+                    const result = filteredResults[index];
+                    if (result && result.answers) {
+                        showAnswersModal(result, name);
+                    }
+                });
+            });
+        }
+
+        // ============================================================
+        // UPDATE STATISTICS
+        // ============================================================
+        function updateStats() {
+            const totalTeachers = TEACHERS.length;
+            const totalResults = allResults.length;
+            const passCount = allResults.filter(r => r.passFail === 'Pass').length;
+            const failCount = allResults.filter(r => r.passFail === 'Fail').length;
+            const passRate = totalResults > 0 ? Math.round((passCount / totalResults) * 100) : 0;
+
+            document.getElementById('totalTeachers').textContent = totalTeachers;
+            document.getElementById('totalResults').textContent = totalResults;
+            document.getElementById('passCount').textContent = passCount;
+            document.getElementById('failCount').textContent = failCount;
+            document.getElementById('passRate').textContent = passRate + '%';
+        }
+
+        // ============================================================
+        // UPDATE COUNT
+        // ============================================================
+        function updateCount(results) {
+            const total = results.length;
+            const allTotal = allResults.length;
+            
+            countDisplay.textContent = total;
+            
+            if (total !== allTotal) {
+                filterInfo.textContent = `(filtered from ${allTotal} total)`;
+                resultCount.style.background = '#fff3cd';
+                resultCount.style.color = '#856404';
+            } else {
+                filterInfo.textContent = '';
+                resultCount.style.background = '#d4edda';
+                resultCount.style.color = '#155724';
+            }
+        }
+
+        // ============================================================
+        // SHOW ANSWERS MODAL
+        // ============================================================
+        function showAnswersModal(result, name) {
+            modalTitle.textContent = `📝 ${name}'s Answers`;
+            
+            if (!result.answers || result.answers.length === 0) {
+                modalAnswers.innerHTML = `
+                    <div style="text-align:center; padding:20px; color:#6c757d;">
+                        <p>No answers found for this interview.</p>
+                    </div>
+                `;
+            } else {
+                let html = '';
+                result.answers.forEach((answer, index) => {
+                    const hasAnswer = answer && answer.trim().length > 0;
+                    const statusClass = hasAnswer ? 'answered' : 'unanswered';
+                    const statusIcon = hasAnswer ? '✅' : '❌';
+                    const answerText = hasAnswer ? answer : 'No answer provided';
+                    
+                    html += `
+                        <div class="modal-answer ${statusClass}">
+                            <span class="q-label">${statusIcon} Question ${index + 1}:</span>
+                            <div class="a-text">${answerText}</div>
+                        </div>
+                    `;
+                });
+                modalAnswers.innerHTML = html;
+            }
+            
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ============================================================
+        // MODAL CONTROLS
+        // ============================================================
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+        searchInput.addEventListener('input', applyFilters);
+        sortSelect.addEventListener('change', applyFilters);
+        refreshBtn.addEventListener('click', loadResults);
+
+        adminLogoutBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                window.location.href = '../index.html';
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        loadResults();
+
+        console.log('🏫 Flying Colours Schooling System Moro - Admin Dashboard');
+        console.log('👨‍🏫 Total Teachers:', TEACHERS.length);
+
+    </script>
 </body>
 </html>
