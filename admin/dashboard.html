@@ -48,6 +48,102 @@
         .stat-card.fail .number { color: #dc3545; }
         .status-pass { background: #d4edda; color: #155724; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
         .status-fail { background: #f8d7da; color: #721c24; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        
+        /* View Answers Button */
+        .btn-view-answers {
+            background: #0a3d6b;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-view-answers:hover {
+            background: #1a5a8a;
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #dc3545;
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-close:hover { transform: scale(1.1); }
+        .modal-title {
+            color: #0a3d6b;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            padding-right: 40px;
+        }
+        .modal-answer {
+            padding: 10px 14px;
+            margin: 6px 0;
+            border-radius: 8px;
+            border-left: 4px solid #1a5a8a;
+            background: #f8f9fa;
+        }
+        .modal-answer .q-label {
+            font-weight: 600;
+            color: #0a3d6b;
+            display: block;
+        }
+        .modal-answer .a-text {
+            margin-top: 4px;
+            color: #333;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .modal-answer.answered {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .modal-answer.unanswered {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
     </style>
 </head>
 <body>
@@ -122,7 +218,7 @@
                                 <th>Percentage</th>
                                 <th>Status</th>
                                 <th>Date</th>
-                                <th>Time</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="resultsBody">
@@ -139,6 +235,15 @@
                 </p>
             </div>
         </main>
+    </div>
+
+    <!-- ===== ANSWER VIEW MODAL ===== -->
+    <div class="modal-overlay" id="answerModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalBtn">✕</button>
+            <h2 class="modal-title" id="modalTitle">📝 Teacher's Answers</h2>
+            <div id="modalAnswers"></div>
+        </div>
     </div>
 
     <script type="importmap">
